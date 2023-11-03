@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum InvoiceStatus {
+  PAID
+  PENDING
+  OVERDUE
+}
+
+enum InvoiceType {
+  INCOMING
+  OUTGOING
+}
+
+model Invoice {
+  uuid               String        @id @unique @default(uuid()) @db.Uuid
+  invoice_number     String        @db.VarChar(10)
+  date               DateTime      @db.Date
+  due_date           DateTime      @db.Date
+  vendor_name        String        @db.VarChar(100)
+  vendor_vat_number  String        @db.VarChar(255)
+  remittance_address String
+  amount_due         Decimal       @db.Decimal(10, 2)
+  currency           String        @db.VarChar(3)
+  filename           String?       @db.VarChar(255)
+  status             InvoiceStatus
+  type               InvoiceType
+  created_at         DateTime      @default(now()) @db.Timestamp(6)
+  updated_at         DateTime      @default(now()) @db.Timestamp(6)
+  user               User          @relation(fields: [user_uuid], references: [uuid])
+  user_uuid          String        @db.Uuid
+
+  @@index([user_uuid])
+  @@index([invoice_number])
+}
+
+model User {
+  uuid       String    @id @unique @default(uuid()) @db.Uuid
+  first_name String
+  last_name  String
+  email      String    @unique
+  password   String
+  username   String    @unique
+  avatar_url String?
+  created_at DateTime  @default(now()) @db.Timestamp(6)
+  updated_at DateTime  @default(now()) @db.Timestamp(6)
+  Invoice    Invoice[]
+}

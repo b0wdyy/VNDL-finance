@@ -1,15 +1,21 @@
-import type { MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
+
+import { requireUserId } from '~/utils/session.server'
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
-  ];
-};
+    { title: 'New Remix App' },
+    { name: 'description', content: 'Welcome to Remix!' },
+  ]
+}
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  return requireUserId(request)
+}
 
 export default function Index() {
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
+    <div style={{ fontFamily: 'system-ui, sans-serif', lineHeight: '1.8' }}>
       <h1>Welcome to Remix</h1>
       <ul>
         <li>
@@ -37,5 +43,5 @@ export default function Index() {
         </li>
       </ul>
     </div>
-  );
+  )
 }
