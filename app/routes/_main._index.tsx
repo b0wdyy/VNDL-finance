@@ -6,8 +6,7 @@ import {
 } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 
-import { getUserById } from '~/services/user.service'
-import { requireUserId } from '~/utils/session.server'
+import { getUser } from '~/utils/session.server'
 
 export const meta: MetaFunction = () => {
   return [
@@ -17,8 +16,7 @@ export const meta: MetaFunction = () => {
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const userId = await requireUserId(request)
-  const user = await getUserById(userId)
+  const user = await getUser(request)
 
   return json({
     user: {

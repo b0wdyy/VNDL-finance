@@ -1,5 +1,7 @@
 import { createCookieSessionStorage, redirect } from '@remix-run/node'
 
+import { getUserByUuid } from '~/services/user.service'
+
 const sessionSecret = process.env.SESSION_SECRET
 if (!sessionSecret) {
   throw new Error('SESSION_SECRET must be set')
@@ -31,13 +33,28 @@ function getUserSession(request: Request) {
   return storage.getSession(request.headers.get('Cookie'))
 }
 
-export async function getUserIdFromSession(request: Request) {
+export async function getUserUuidFromSession(request: Request) {
   const session = await getUserSession(request)
   const userId = session.get('userId')
   if (!userId || typeof userId !== 'string') {
     return null
   }
   return userId
+}
+
+export async function getUser(request: Request) {
+  const userUuid = await getUserUuidFromSession(request)
+  if (typeof userUuid !== 'string') {
+    return null
+  }
+
+  const user = await getUserByUuid(userUuid)
+
+  if (!user) {
+    throw await logoutUser(request)
+  }
+
+  return user
 }
 
 export async function requireUserId(
@@ -54,9 +71,9 @@ export async function requireUserId(
 }
 
 export async function requireLoggedOutUser(request: Request) {
-  const id = await getUserIdFromSession(request)
+  const user = await getUser(request)
 
-  if (id) {
+  if (user) {
     throw redirect('/')
   }
 
