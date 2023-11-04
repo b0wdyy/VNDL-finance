@@ -10,6 +10,7 @@ async function seed() {
       first_name: 'Bodhi',
       last_name: 'Vandael',
       username: 'bowdy',
+      avatar_url: 'https://placedog.net/500',
       password: bcrypt.hashSync('password', 10),
     },
   })
@@ -40,7 +41,6 @@ function getInvoices() {
       type: InvoiceType.INCOMING,
       vendor_name: 'Acme Inc',
       vendor_vat_number: '123456789',
-      filename: null,
       updated_at: new Date(),
     },
     {

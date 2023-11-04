@@ -8,9 +8,6 @@ if (!sessionSecret) {
 const storage = createCookieSessionStorage({
   cookie: {
     name: 'VNDL-consulting_session',
-    // normally you want this to be `secure: true`
-    // but that doesn't work on localhost for Safari
-    // https://web.dev/when-to-use-local-https/
     secure: process.env.NODE_ENV === 'production',
     secrets: [sessionSecret],
     sameSite: 'lax',
@@ -23,7 +20,6 @@ const storage = createCookieSessionStorage({
 export async function createUserSession(userId: string, redirectTo: string) {
   const session = await storage.getSession()
   session.set('userId', userId)
-  console.log(redirectTo)
   return redirect(redirectTo, {
     headers: {
       'Set-Cookie': await storage.commitSession(session),
@@ -65,4 +61,14 @@ export async function requireLoggedOutUser(request: Request) {
   }
 
   return null
+}
+
+export async function logoutUser(request: Request) {
+  const session = await getUserSession(request)
+
+  return redirect('/login', {
+    headers: {
+      'Set-Cookie': await storage.destroySession(session),
+    },
+  })
 }
