@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs'
 
-import { getUserByEmail } from './user.service'
+import { db } from '~/utils/db.server'
 
 export async function login({
   email,
@@ -9,7 +9,11 @@ export async function login({
   email: string
   password: string
 }) {
-  const user = await getUserByEmail(email)
+  const user = await db.user.findUnique({
+    where: {
+      email,
+    },
+  })
   if (!user) {
     return null
   }

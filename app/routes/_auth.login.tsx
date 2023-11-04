@@ -18,7 +18,7 @@ import {
 import { Form, useActionData, useSearchParams } from '@remix-run/react'
 import { useEffect } from 'react'
 
-import { login } from '~/services/auth.server'
+import { login } from '~/utils/auth.server'
 import { createUserSession, requireLoggedOutUser } from '~/utils/session.server'
 
 export const meta: MetaFunction = () => {

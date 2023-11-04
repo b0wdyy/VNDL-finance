@@ -1,6 +1,6 @@
 import { createCookieSessionStorage, redirect } from '@remix-run/node'
 
-import { getUserByUuid } from '~/services/user.service'
+import { db } from './db.server'
 
 const sessionSecret = process.env.SESSION_SECRET
 if (!sessionSecret) {
@@ -48,7 +48,11 @@ export async function getUser(request: Request) {
     return null
   }
 
-  const user = await getUserByUuid(userUuid)
+  const user = await db.user.findUnique({
+    where: {
+      uuid: userUuid,
+    },
+  })
 
   if (!user) {
     throw await logoutUser(request)
