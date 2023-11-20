@@ -10,14 +10,16 @@ import {
   Divider,
   AbsoluteCenter,
   Button,
+  Text,
 } from '@chakra-ui/react'
-import { Link } from '@remix-run/react'
-import { File, Grid, LogOut, Settings, Users } from 'react-feather'
+import { NavLink } from '@remix-run/react'
+import { File, Grid, LogOut, Settings } from 'react-feather'
 
 export const TheSidebar = () => {
   return (
     <Box
       as="nav"
+      bg="white"
       boxShadow="lg"
       borderTopRightRadius="lg"
       borderBottomRightRadius="lg"
@@ -25,8 +27,11 @@ export const TheSidebar = () => {
       w="100%"
       p={8}
     >
-      <Heading as="h1" fontWeight="light" size="md" letterSpacing="wide">
-        VNDL finance
+      <Heading as="h1" fontWeight="bold" size="md" letterSpacing="wide">
+        <Text fontWeight="light" as="span">
+          VNDL
+        </Text>{' '}
+        Finance
       </Heading>
 
       <List spacing={4} mt={8}>
@@ -38,16 +43,31 @@ export const TheSidebar = () => {
         </Box>
 
         <ListItem>
-          <ChakraLink as={Link} to="/">
+          <ChakraLink
+            as={NavLink}
+            _hover={{
+              textDecoration: 'none',
+            }}
+            _activeLink={{
+              color: 'purple.500',
+              bg: 'purple.100',
+              rounded: 'md',
+              fontWeight: 'bold',
+            }}
+            display="block"
+            color="gray.500"
+            p={4}
+            to="/"
+          >
             <Flex alignItems="center" gap={4}>
               <ChakraGrid
-                w={8}
-                h={8}
+                w={10}
+                h={10}
                 placeItems="center"
                 bg="gray.200"
-                rounded="full"
+                rounded="md"
               >
-                <Icon as={Grid} />
+                <Icon boxSize={5} as={Grid} />
               </ChakraGrid>
               Dashboard
             </Flex>
@@ -55,16 +75,31 @@ export const TheSidebar = () => {
         </ListItem>
 
         <ListItem>
-          <ChakraLink as={Link} to="/invoices">
+          <ChakraLink
+            as={NavLink}
+            _hover={{
+              textDecoration: 'none',
+            }}
+            _activeLink={{
+              color: 'purple.500',
+              bg: 'purple.100',
+              rounded: 'md',
+              fontWeight: 'bold',
+            }}
+            display="block"
+            color="gray.500"
+            p={4}
+            to="/invoices"
+          >
             <Flex alignItems="center" gap={4}>
               <ChakraGrid
-                w={8}
-                h={8}
+                w={10}
+                h={10}
                 placeItems="center"
                 bg="gray.200"
-                rounded="full"
+                rounded="md"
               >
-                <Icon as={File} />
+                <Icon boxSize={5} as={File} />
               </ChakraGrid>
               Invoices
             </Flex>
@@ -79,56 +114,56 @@ export const TheSidebar = () => {
         </Box>
 
         <ListItem>
-          <ChakraLink as={Link} to="/settings">
+          <ChakraLink
+            as={NavLink}
+            _hover={{
+              textDecoration: 'none',
+            }}
+            _activeLink={{
+              fill: 'white',
+              color: 'purple.500',
+              bg: 'purple.100',
+              rounded: 'md',
+              fontWeight: 'bold',
+            }}
+            display="block"
+            color="gray.500"
+            p={4}
+            to="/settings"
+          >
             <Flex alignItems="center" gap={4}>
               <ChakraGrid
-                w={8}
-                h={8}
+                w={10}
+                h={10}
                 placeItems="center"
                 bg="gray.200"
-                rounded="full"
+                rounded="md"
               >
-                <Icon as={Settings} />
+                <Icon boxSize={5} as={Settings} />
               </ChakraGrid>
               Settings
             </Flex>
           </ChakraLink>
         </ListItem>
 
-        <ListItem>
-          <ChakraLink as={Link} to="/admin">
-            <Flex alignItems="center" gap={4}>
-              <ChakraGrid
-                w={8}
-                h={8}
-                placeItems="center"
-                bg="gray.200"
-                rounded="full"
-              >
-                <Icon as={Users} />
-              </ChakraGrid>
-              Admin
-            </Flex>
-          </ChakraLink>
-        </ListItem>
-
-        <ListItem as="form" action="/logout" method="post">
+        <ListItem p={4} as="form" action="/logout" method="post">
           <Flex
             as={Button}
             type="submit"
             variant="unstyled"
             fontWeight="normal"
             alignItems="center"
+            color="gray.500"
             gap={4}
           >
             <ChakraGrid
-              w={8}
-              h={8}
+              w={10}
+              h={10}
               placeItems="center"
               bg="gray.200"
-              rounded="full"
+              rounded="md"
             >
-              <Icon as={LogOut} />
+              <Icon boxSize={5} as={LogOut} />
             </ChakraGrid>
             Logout
           </Flex>

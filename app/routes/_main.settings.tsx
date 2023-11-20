@@ -28,24 +28,44 @@ import {
 import { useEffect, useState } from 'react'
 
 import { db } from '~/utils/db.server'
-import { getUser, getUserUuidFromSession } from '~/utils/session.server'
+import {
+  commitSession,
+  getMessageFromSession,
+  getSession,
+  getUser,
+  getUserUuidFromSession,
+} from '~/utils/session.server'
 import { uploadHandler } from '~/utils/upload.server'
 
 export const meta: MetaFunction = () => [
   {
-    title: 'VNDL finance - Settings',
+    title: 'VNDL Finance - Settings',
   },
 ]
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getUser(request)
+  const { message, session } = await getMessageFromSession(
+    request,
+    'successMessage',
+  )
 
-  return {
-    user,
-  }
+  return json(
+    {
+      user,
+      message,
+    },
+    {
+      headers: {
+        'Set-Cookie': await commitSession(session),
+      },
+    },
+  )
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
+  const session = await getSession(request.headers.get('Cookie'))
+
   try {
     const form = await unstable_parseMultipartFormData(request, uploadHandler)
     const first_name = String(form.get('first_name'))
@@ -74,15 +94,23 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       },
     })
 
-    return redirect('/settings')
+    session.flash(
+      'successMessage',
+      'Your profile has been updated successfully',
+    )
+
+    return redirect('/settings', {
+      headers: {
+        'Set-Cookie': await commitSession(session),
+      },
+    })
   } catch (e: unknown) {
-    console.log(e)
     return json({ message: 'Something went wrong' }, { status: 500 })
   }
 }
 
 export default function Settings() {
-  const { user } = useLoaderData<typeof loader>()
+  const { user, message } = useLoaderData<typeof loader>()
   const data = useActionData<typeof action>()
   const navigation = useNavigation()
   const toast = useToast()
@@ -95,6 +123,17 @@ export default function Settings() {
 
     setImage(URL.createObjectURL(file))
   }
+
+  useEffect(() => {
+    console.log(message)
+    if (!message) return
+
+    toast({
+      title: 'Success',
+      description: message,
+      status: 'success',
+    })
+  }, [message])
 
   useEffect(() => {
     if (!data?.message) return
@@ -112,7 +151,15 @@ export default function Settings() {
         Profile
       </Heading>
 
-      <Box mt={8} as={Form} method="post" encType="multipart/form-data">
+      <Box
+        p={8}
+        bg="white"
+        rounded="md"
+        mt={8}
+        as={Form}
+        method="post"
+        encType="multipart/form-data"
+      >
         <FormControl mb={2}>
           <FormLabel htmlFor="avatar">Avatar</FormLabel>
           <Image
@@ -186,7 +233,7 @@ export default function Settings() {
             variant="outline"
             type="submit"
           >
-            Save
+            Save settings
           </Button>
         </Flex>
       </Box>

@@ -10,7 +10,7 @@ import { getUser } from '~/utils/session.server'
 
 export const meta: MetaFunction = () => {
   return [
-    { title: 'Index' },
+    { title: 'VNDL Finance - Dashboard' },
     { name: 'description', content: 'VNDL consulting finance application' },
   ]
 }
@@ -30,7 +30,9 @@ export default function Index() {
 
   return (
     <Box>
-      <Heading as="h2">Welcome {user.username}</Heading>
+      <Heading bg="white" as="h2">
+        Welcome {user.username}
+      </Heading>
     </Box>
   )
 }

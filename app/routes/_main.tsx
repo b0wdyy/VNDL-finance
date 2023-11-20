@@ -11,7 +11,7 @@ export const loader = ({ request }: LoaderFunctionArgs) => {
 
 export default function MainLayout() {
   return (
-    <Grid templateColumns={'repeat(4, 1fr)'}>
+    <Grid bg="gray.100" templateColumns={'repeat(4, 1fr)'}>
       <TheSidebar />
 
       <GridItem p={8} colSpan={3}>
