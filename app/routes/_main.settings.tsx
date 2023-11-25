@@ -76,7 +76,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const avatar_url = String(form.get('avatar_url'))
 
     const userUuid = await getUserUuidFromSession(request)
-    const searchParams = new URLSearchParams([['redirectTo', '/settings']])
+    const searchParams = new URLSearchParams([])
 
     if (!userUuid) return redirect(`/login?${searchParams}`)
 
@@ -94,10 +94,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       },
     })
 
-    session.flash(
-      'successMessage',
-      'Your profile has been updated successfully',
-    )
+    session.flash('successMessage', {
+      message: 'Your profile has been updated successfully',
+    })
 
     return redirect('/settings', {
       headers: {
@@ -125,12 +124,11 @@ export default function Settings() {
   }
 
   useEffect(() => {
-    console.log(message)
     if (!message) return
 
     toast({
       title: 'Success',
-      description: message,
+      description: message.message,
       status: 'success',
     })
   }, [message])

@@ -1,4 +1,4 @@
-import { Box, Heading } from '@chakra-ui/react'
+import { Box, Grid, Heading } from '@chakra-ui/react'
 import {
   json,
   type LoaderFunctionArgs,
@@ -6,6 +6,9 @@ import {
 } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 
+import { BalanceCard } from '~/components/dashboard/cards/balance-card'
+import { ExpenseCard } from '~/components/dashboard/cards/expense-card'
+import { IncomeCard } from '~/components/dashboard/cards/income-card'
 import { getUser } from '~/utils/session.server'
 
 export const meta: MetaFunction = () => {
@@ -30,9 +33,15 @@ export default function Index() {
 
   return (
     <Box>
-      <Heading bg="white" as="h2">
+      <Heading bg="white" as="h2" mt={-8} mx={-8} p={6}>
         Welcome {user.username}
       </Heading>
+
+      <Grid templateColumns="repeat(3, 1fr)" gap={6} my={8}>
+        <BalanceCard />
+        <IncomeCard />
+        <ExpenseCard />
+      </Grid>
     </Box>
   )
 }

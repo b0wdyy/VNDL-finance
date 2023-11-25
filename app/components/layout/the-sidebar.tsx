@@ -17,16 +17,7 @@ import { File, Grid, LogOut, Settings } from 'react-feather'
 
 export const TheSidebar = () => {
   return (
-    <Box
-      as="nav"
-      bg="white"
-      boxShadow="lg"
-      borderTopRightRadius="lg"
-      borderBottomRightRadius="lg"
-      h="100vh"
-      w="100%"
-      p={8}
-    >
+    <Box as="nav" bg="white" h="100vh" w="100%" p={8}>
       <Heading as="h1" fontWeight="bold" size="md" letterSpacing="wide">
         <Text fontWeight="light" as="span">
           VNDL
